@@ -18,35 +18,33 @@ _____
 
 ### Tasks
 
-|Name  |Bokmål | Nynorsk  | Northern Sámi | Task type  | Task category |
+|Name  |Bokmål | Nynorsk  | Northern Sámi | Task formulation  | Task category |
 |:---|:---|:---|:---|:---|:---|
-|[NoReC Sentence](https://huggingface.co/datasets/ltg/norec_sentence) |`norec_sentence`  | — | — |Text classification| Sentiment analysis |
-|[NoReC Document](https://huggingface.co/datasets/ltg/norec_document) |`norec_document`  | — | — |Text classification| Sentiment analysis |
-|[SLIDE](https://huggingface.co/datasets/ltg/slide) |`slide`  | — | — |Text classification| Norwegian language knowledge |
-|[NCB](https://huggingface.co/datasets/hcfa/ncb) |`ncb`| — | — |Sentence ranking| Norwegian language knowledge   |
-|[NoCoLA](https://huggingface.co/datasets/ltg/nocola) |`nocola`| — | — |Sentence ranking| Norwegian language knowledge   |
-|[MultiBLiMP](https://huggingface.co/datasets/jumelet/multiblimp) | — | — |`noreval_multiblimp`|Sentence ranking| Northern Sámi language knowledge |
-|[NorIdiom](https://huggingface.co/datasets/Sprakbanken/Norwegian_idioms) |`noridiom_nob`  | `noridiom_nno`  | — |Sentence completion| Norwegian language knowledge  |
-|[NorBelebele](https://huggingface.co/datasets/ltg/norbelebele) |`norbelebele`| —| — |Multiple-choice question answering| Machine reading comprehension |
-|[NRK-Quiz-QA](https://huggingface.co/datasets/ltg/nrk_quiz_qa) |`nrk_quiz_qa_nob`| `nrk_quiz_qa_nno`| — |Multiple-choice question answering| Norwegian-specific & world knowledge |
-|[NorOpenBookQA](https://huggingface.co/datasets/ltg/noropenbookqa) |`noropenbookqa_nob`| `noropenbookqa_nno` | — |Multiple-choice question answering| Norwegian-specific & world knowledge |
-|[NorOpenBookQA (without fact)](https://huggingface.co/datasets/ltg/noropenbookqa) |`noropenbookqa_no_fact_nob`| `noropenbookqa_no_fact_nno` | — |Multiple-choice question answering| Norwegian-specific & world knowledge |
-|[NorCommonsenseQA](https://huggingface.co/datasets/ltg/norcommonsenseqa) |`norcommonsenseqa_nob`| `norcommonsenseqa_nno` | — |Multiple-choice question answering|Commonsense reasoning  |
-|[NorTruthfulQA Multiple choice](https://huggingface.co/datasets/ltg/nortruthfulqa_mc) |`nortruthfulqa_mc_nob`| `nortruthfulqa_mc_nno` | — |Multiple-choice question answering |Truthfulness |
-|[NorQuAD](https://huggingface.co/datasets/ltg/norquad) |`norquad`| —  | — |Generative question answering |Machine reading comprehension |
-|[NorTruthfulQA Generation](https://huggingface.co/datasets/ltg/nortruthfulqa_gen) |`nortruthfulqa_gen_nob`| `nortruthfulqa_gen_nno` | — | Generative question answering|Truthfulness |
-|[ASK-GEC](https://huggingface.co/datasets/ltg/ask-gec) |`ask_gec`| — | — |Sequence-to-sequence generation|Norwegian language knowledge |
-|[NorSumm](https://huggingface.co/datasets/SamiaT/NorSumm)  |`norsumm_nob` | `norsumm_nno`  | — |Sequence-to-sequence generation|Text summarization |
-|[NorSumm Translation (Bokmål → Nynorsk)](https://huggingface.co/datasets/ltg/norsumm-nob-nno-translation) | `norsumm_nob_nno_translation`| —  | — |Sequence-to-sequence generation|Machine translation |
-|[NorSumm Translation (Nynorsk → Bokmål)](https://huggingface.co/datasets/ltg/norsumm-nob-nno-translation) | — | `norsumm_nno_nob_translation`  | — |Sequence-to-sequence generation|Machine translation |
-|[Tatoeba (English → Bokmål/Nynorsk)](https://huggingface.co/datasets/Helsinki-NLP/tatoeba_mt) | `tatoeba_eng_nob`| `tatoeba_eng_nno`  | — |Sequence-to-sequence generation|Machine translation |
-|[Tatoeba (Bokmål/Nynorsk → English)](https://huggingface.co/datasets/Helsinki-NLP/tatoeba_mt) | `tatoeba_nob_eng`| `tatoeba_nno_eng`  | — |Sequence-to-sequence generation|Machine translation |
-|[Tatoeba (Bokmål → Northern Sámi)](https://huggingface.co/datasets/ltg/saami-tatoeba) | — | — | `tatoeba_nob_sme`|Sequence-to-sequence generation|Machine translation |
-|[Tatoeba (Northern Sámi → Bokmål)](https://huggingface.co/datasets/ltg/saami-tatoeba) | — | — | `tatoeba_sme_nob`|Sequence-to-sequence generation|Machine translation |
-|[NorRewrite-Instruct](https://huggingface.co/datasets/ltg/norrewrite-instruct) |`norrewrite_instruct`  |— | — |Sequence-to-sequence generation|Instruction following|
-|[NorSummarize-Instruct](https://huggingface.co/datasets/ltg/norsummarize-instruct) |`norsummarize_instruct` |— | — |Sequence-to-sequence generation|Instruction following|
+|[NoReC Sentence](https://huggingface.co/datasets/ltg/norec_sentence) |`norec_sentence`  | — | — |Text classification| Language understanding |
+|[NoReC Document](https://huggingface.co/datasets/ltg/norec_document) |`norec_document`  | — | — |Text classification| Language understanding |
+|[SLIDE](https://huggingface.co/datasets/ltg/slide) |`slide`  | `slide` | — |Text classification| Linguistic knowledge |
+|[NCB](https://huggingface.co/datasets/hcfa/ncb) |`ncb`| — | — |Text classification| Linguistic knowledge   |
+|[NoCoLA](https://huggingface.co/datasets/ltg/nocola) |`nocola`| — | — |Text classification| Linguistic knowledge   |
+|[MultiBLiMP](https://huggingface.co/datasets/jumelet/multiblimp) | — | — |`noreval_multiblimp`|Text classification| Linguistic knowledge |
+|[NorIdiom](https://huggingface.co/datasets/Sprakbanken/Norwegian_idioms) |`noridiom_nob`  | `noridiom_nno`  | — |Text classification| Linguistic knowledge |
+|[NorBelebele](https://huggingface.co/datasets/ltg/norbelebele) |`norbelebele`| —| — |Text classification| Language understanding |
+|[NRK-Quiz-QA](https://huggingface.co/datasets/ltg/nrk_quiz_qa) |`nrk_quiz_qa_nob`| `nrk_quiz_qa_nno`| — |Text classification| World knowledge and reasoning |
+|[NorOpenBookQA](https://huggingface.co/datasets/ltg/noropenbookqa) |`noropenbookqa_nob`| `noropenbookqa_nno` | — |Text classification| Language understanding |
+|[NorOpenBookQA (without facts)](https://huggingface.co/datasets/ltg/noropenbookqa) |`noropenbookqa_no_fact_nob`| `noropenbookqa_no_fact_nno` | — |Text classification| World knowledge and reasoning |
+|[NorCommonsenseQA](https://huggingface.co/datasets/ltg/norcommonsenseqa) |`norcommonsenseqa_nob`| `norcommonsenseqa_nno` | — |Text classification|World knowledge and reasoning  |
+|[NorTruthfulQA Multiple choice](https://huggingface.co/datasets/ltg/nortruthfulqa_mc) |`nortruthfulqa_mc_nob`| `nortruthfulqa_mc_nno` | — |Text classification | World knowledge and reasoning |
+|[NorTruthfulQA Generation](https://huggingface.co/datasets/ltg/nortruthfulqa_gen) |`nortruthfulqa_gen_nob`| `nortruthfulqa_gen_nno` | — | Text generation|World knowledge and reasoning |
+|[NorQuAD](https://huggingface.co/datasets/ltg/norquad) |`norquad`| —  | — |Text generation| Language understanding |
+|[ASK-GEC](https://huggingface.co/datasets/ltg/ask-gec) |`ask_gec`| — | — |Text generation| Linguistic knowledge |
+|[NorSumm](https://huggingface.co/datasets/SamiaT/NorSumm)  |`norsumm_nob` | `norsumm_nno`  | — |Text generation| Generation and summarization |
+|[NorSumm Translation (Bokmål ↔ Nynorsk)](https://huggingface.co/datasets/ltg/norsumm-nob-nno-translation) | `norsumm_nob_nno_translation`| `norsumm_nno_nob_translation`  | — |Text generation|Generation and summarization |
+|[Tatoeba (English → Bokmål/Nynorsk)](https://huggingface.co/datasets/Helsinki-NLP/tatoeba_mt) | `tatoeba_eng_nob`| `tatoeba_eng_nno`  | — |Text generation|Machine translation |
+|[Tatoeba (Bokmål/Nynorsk → English)](https://huggingface.co/datasets/Helsinki-NLP/tatoeba_mt) | `tatoeba_nob_eng`| `tatoeba_nno_eng`  | — |Text generation|Machine translation |
+|[Tatoeba (Bokmål ↔ Northern Sámi)](https://huggingface.co/datasets/ltg/saami-tatoeba) | `tatoeba_sme_nob` | — | `tatoeba_nob_sme`|Text generation|Machine translation |
+|[NorRewrite-Instruct](https://huggingface.co/datasets/ltg/norrewrite-instruct) |`norrewrite_instruct`  | — | — |Text generation|Generation and summarization|
+|[NorSummarize-Instruct](https://huggingface.co/datasets/ltg/norsummarize-instruct) |`norsummarize_instruct` | — | — |Text generation|Generation and summarization|
 
-<details open>
+<details>
 <summary><b>Table description</b></summary>
 
 * **Name**: a dataset name with a HuggingFace link.
