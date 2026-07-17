@@ -48,10 +48,3 @@ def process_results(doc, results):
     )
     return {"em_first": exact_match_first_word, "em": exact_match, "fscore": fscore}
 
-
-def filter_dataset_nb(dataset):
-    return dataset.filter(lambda example: example["language"] == "nob")
-
-
-def filter_dataset_nn(dataset):
-    return dataset.filter(lambda example: example["language"] == "nno")
