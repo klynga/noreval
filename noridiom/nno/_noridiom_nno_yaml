@@ -1,0 +1,7 @@
+include: ../_noridiom_yaml
+metadata:
+  version: 1.1
+  primary_metric: em_first
+  random_baseline: 0.0
+  category: linguistic_knowledge
+  language: nno

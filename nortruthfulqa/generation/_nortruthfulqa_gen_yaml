@@ -12,6 +12,9 @@ generation_kwargs:
   do_sample: false
   max_new_tokens: 64
 metric_list:
+  - metric: rougeL_max
+    aggregation: mean
+    higher_is_better: true
   - metric: bleu_max
     aggregation: mean
     higher_is_better: true
@@ -39,9 +42,6 @@ metric_list:
   - metric: rouge2_diff
     aggregation: mean
     higher_is_better: true
-  - metric: rougeL_max
-    aggregation: mean
-    higher_is_better: true
   - metric: rougeL_acc
     aggregation: mean
     higher_is_better: true
@@ -49,4 +49,4 @@ metric_list:
     aggregation: mean
     higher_is_better: true
 metadata:
-  version: 1.0
+  version: 1.1

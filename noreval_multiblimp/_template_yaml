@@ -17,4 +17,8 @@ metric_list:
     aggregation: mean
     higher_is_better: true
 metadata:
-  version: 1.0
+  version: 1.1
+  primary_metric: acc
+  random_baseline: 0.5
+  category: linguistic_knowledge
+  language: sme
