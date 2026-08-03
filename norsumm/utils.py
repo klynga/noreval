@@ -5,6 +5,7 @@ from evaluate import load
 
 try:
     # import bert_score
+    import bert_score
     import sacrebleu
     from rouge_score import rouge_scorer, scoring
 except ModuleNotFoundError as e:
@@ -46,20 +47,20 @@ def process_results(doc, results):
     rougeL_max = np.nanmax(rougeL_scores)
     rougeL_avg = np.nanmean(rougeL_scores)
 
-    # bertscore_f1s = [
-    #     bertscore_f1(references=[reference], predictions=[completion])
-    #     for reference in references
-    # ]
-    # bertscore_f1_max = np.nanmax(bertscore_f1s)
-    # bertscore_f1_avg = np.nanmean(bertscore_f1s)
+    bertscore_f1s = [
+        bertscore_f1(references=[reference], predictions=[completion])
+        for reference in references
+    ]
+    bertscore_f1_max = np.nanmax(bertscore_f1s)
+    bertscore_f1_avg = np.nanmean(bertscore_f1s)
 
     return {
         "bleu_max": bleu_max,
         "bleu_avg": bleu_avg,
         "rougeL_max": rougeL_max,
         "rougeL_avg": rougeL_avg,
-        # "bertscore_f1_max": bertscore_f1_max,
-        # "bertscore_f1_avg": bertscore_f1_avg,
+        "bertscore_f1_max": bertscore_f1_max,
+        "bertscore_f1_avg": bertscore_f1_avg,
     }
 
 
