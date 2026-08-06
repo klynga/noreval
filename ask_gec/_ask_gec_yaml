@@ -16,4 +16,4 @@ metric_list:
     aggregation: !function utils.errant_agg
     higher_is_better: true
 metadata:
-  version: 1.2
+  version: 1.1
