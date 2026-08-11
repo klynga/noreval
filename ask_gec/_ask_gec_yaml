@@ -17,7 +17,7 @@ metric_list:
     higher_is_better: true
 metadata:
   version: 1.1
-  primary_metric: errant_f05
+  primary_metric: errant
   random_baseline: 0.0
   category: linguistic_knowledge
   language: nob
