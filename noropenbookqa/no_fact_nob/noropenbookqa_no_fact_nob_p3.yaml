@@ -4,3 +4,4 @@ dataset_name: nb
 include: _noropenbookqa_no_fact_nob_yaml
 doc_to_text: "Spørsmål: {{question_stem}}\nA: {{choices.text[0]}}\nB: {{choices.text[1]}}\nC: {{choices.text[2]}}\nD: {{choices.text[3]}}\n\nSvar:"
 doc_to_choice: "{{choices.label}}"
+process_results: !function utils.process_noropenbookqa_no_fact_nob_p3
