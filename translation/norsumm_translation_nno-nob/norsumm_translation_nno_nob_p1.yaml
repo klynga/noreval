@@ -1,0 +1,7 @@
+dataset_path: ltg/norsumm-nob-nno-translation
+tag: norsumm_translation_nno_nob
+doc_to_target: text_nob
+task: norsumm_translation_nno_nob_p1
+include: _norsumm_translation_nno_nob_yaml
+training_split: test
+doc_to_text: "Oversett følgende tekst til bokmål: {{text_nno}}\nBokmål:"

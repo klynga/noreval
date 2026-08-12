@@ -1,0 +1,25 @@
+group: multiblimp_sme
+task:
+  - "multiblimp_sme_1-2"
+  - "multiblimp_sme_2-1"
+  - "multiblimp_sme_1-3"
+  - "multiblimp_sme_3-1"
+  - "multiblimp_sme_2-3"
+  - "multiblimp_sme_3-2"
+  - "multiblimp_sme_1-23"
+  - "multiblimp_sme_SG-PL"
+  - "multiblimp_sme_PL-SG"
+  - "multiblimp_sme_SG-DU"
+  - "multiblimp_sme_DU-SG"
+  - "multiblimp_sme_PL-DU"
+  - "multiblimp_sme_DU-PL"
+aggregate_metric_list:
+  - metric: acc
+    aggregation: mean
+    weight_by_size: True
+metadata:
+  version: 1.1
+  primary_metric: acc
+  random_baseline: 0.5
+  category: linguistic_knowledge
+  language: sme

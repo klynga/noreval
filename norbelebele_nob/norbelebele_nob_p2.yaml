@@ -1,0 +1,4 @@
+task: norbelebele_nob_p2
+include: _norbelebele_nob_yaml
+doc_to_text: "{{question}}\nHvilket av følgende mulige svar er det riktige?\nA: {{mc_answer1}}\nB: {{mc_answer2}}\nC: {{mc_answer3}}\nD: {{mc_answer4}}\nSvar:"
+doc_to_choice: ["A", "B", "C", "D"]
