@@ -1,6 +1,6 @@
 tag:
   - norec_document_nob
-  - norec_document_mcf
+  - norec_document_nob_mcf
 dataset_path: ltg/norec_document
 task: norec_document_nob_mcf_p0
 include: _norec_document_nob_yaml

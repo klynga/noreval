@@ -1,6 +1,6 @@
 tag:
   - norec_sentence_nob
-  - norec_sentence_cf
+  - norec_sentence_nob_cf
 dataset_path: ltg/norec_sentence
 task: norec_sentence_nob_cf_p1
 include: _norec_sentence_nob_yaml
