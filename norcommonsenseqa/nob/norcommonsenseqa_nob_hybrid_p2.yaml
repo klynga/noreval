@@ -1,6 +1,8 @@
-tag: norcommonsenseqa_nob
+tag:
+  - norcommonsenseqa_nob
+  - norcommonsenseqa_nob_hybrid
 dataset_name: nb
-task: norcommonsenseqa_nob_p2
+task: norcommonsenseqa_nob_hybrid_p2
 include: _norcommonsenseqa_nob_yaml
 doc_to_text: "Gitt alternativene under, hva er svaret på følgende spørsmål: {{question}}\n\nAlternativer:\n- {{choices.text[0]}}\n- {{choices.text[1]}}\n- {{choices.text[2]}}\n- {{choices.text[3]}}\n- {{choices.text[4]}}\n\nSvar:"
 doc_to_choice: "{{choices.text}}"
