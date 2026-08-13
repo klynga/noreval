@@ -2,4 +2,3 @@ task: norbelebele_p2
 include: _norbelebele_yaml
 doc_to_text: "{{question}}\nHvilket av følgende mulige svar er det riktige?\nA: {{mc_answer1}}\nB: {{mc_answer2}}\nC: {{mc_answer3}}\nD: {{mc_answer4}}\nSvar:"
 doc_to_choice: ["A", "B", "C", "D"]
-process_results: !function utils.process_norbelebele_p2

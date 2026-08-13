@@ -6,6 +6,7 @@ fewshot_config:
   sampler: first_n
 output_type: multiple_choice
 doc_to_target: "{{['1', '2', '3', '4'].index(correct_answer_num)}}"
+process_results: !function utils.process_results
 metric_list:
   - metric: acc
     aggregation: mean

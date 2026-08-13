@@ -11,10 +11,7 @@ while not os.path.isfile(os.path.join(_root, "noreval_metrics.py")):
 if _root not in sys.path:
     sys.path.insert(0, _root)
 
-from noreval_metrics import score_choices
+from noreval_metrics import make_process_results
 
-
-def process_results(doc, results):
-    # the correct answer is always the first of mc1_targets.choices
-    metrics, _ = score_choices(results, doc["mc1_targets"]["choices"], [0])
-    return metrics
+# the correct answer is always the first of mc1_targets.choices
+process_results = make_process_results(lambda doc: [0])

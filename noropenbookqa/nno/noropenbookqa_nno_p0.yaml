@@ -4,4 +4,3 @@ dataset_name: nn
 include: _noropenbookqa_nno_yaml
 doc_to_text: "{{fact}}\n{{question_stem}}"
 doc_to_choice: "{{choices.text}}"
-process_results: !function utils.process_noropenbookqa_nno_p0

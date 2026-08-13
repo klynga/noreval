@@ -5,6 +5,7 @@ validation_split: null
 test_split: test
 process_docs: !function utils.filter_dataset
 doc_to_target: "{{choices.label.index(answer)}}"
+process_results: !function utils.process_results
 metric_list:
   - metric: acc
     aggregation: mean

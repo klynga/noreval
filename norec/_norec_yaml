@@ -3,6 +3,7 @@ output_type: multiple_choice
 training_split: train
 test_split: test
 doc_to_target: sentiment
+process_results: !function utils.process_results
 metric_list:
   - metric: f1
     aggregation: !function utils.multi_f1

@@ -11,16 +11,11 @@ while not os.path.isfile(os.path.join(_root, "noreval_metrics.py")):
 if _root not in sys.path:
     sys.path.insert(0, _root)
 
-from noreval_metrics import variant_process_results
-
-_here = os.path.dirname(os.path.abspath(__file__))
+from noreval_metrics import make_process_results
 
 
 def _gold_indices(doc):
     return [["1", "2", "3", "4"].index(doc["correct_answer_num"])]
 
 
-def __getattr__(name):
-    # utils.process_<variant> scores the doc_to_choice of <variant>.yaml,
-    # so new prompt variants need no code changes here
-    return variant_process_results(_here, name, _gold_indices)
+process_results = make_process_results(_gold_indices)

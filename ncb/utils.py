@@ -11,9 +11,7 @@ while not os.path.isfile(os.path.join(_root, "noreval_metrics.py")):
 if _root not in sys.path:
     sys.path.insert(0, _root)
 
-from noreval_metrics import score_choices
+from noreval_metrics import make_process_results
 
-
-def process_results(doc, results):
-    metrics, _ = score_choices(results, [doc["correct"], doc["wrong"]], [0])
-    return metrics
+# doc_to_choice is [correct, wrong], so the correct choice is always index 0
+process_results = make_process_results(lambda doc: [0])

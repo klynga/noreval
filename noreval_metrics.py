@@ -6,68 +6,28 @@ metrics. Tasks that want them define a custom process_results, which replaces
 the built-in computation entirely, so the accuracy metrics are re-implemented
 here as well (with the same formulas as the harness).
 
+The process_results functions built here declare a `choices` parameter, which
+our lm-evaluation-harness fork detects and fills with the rendered
+doc_to_choice of the scored document — the exact strings whose loglikelihoods
+arrive in `results` — so tasks never have to replicate their choice strings.
+
 This module lives at the repository root so that every task can share it. The
 harness imports each task's utils.py standalone, so the task modules load this
 file by walking up the directory tree; see e.g. ncb/utils.py.
 """
 
-import math
-import os
-
-import yaml
+from scipy.special import softmax
 
 
-class _ConfigLoader(yaml.SafeLoader):
-    """Reads task configs while ignoring lm-eval's custom !function tags."""
+def make_process_results(gold_indices, postprocess=None):
+    """Build a task's process_results from its notion of the correct answers.
 
-
-_ConfigLoader.add_constructor(
-    "!function", lambda loader, node: loader.construct_scalar(node)
-)
-
-
-def resolve_choices(doc_to_choice, doc):
-    """Turn a config's doc_to_choice into the list of scored strings for one doc,
-    mirroring the harness's handling for the forms NorEval uses: either a static
-    list, or a Jinja template that renders to a list literal."""
-    if isinstance(doc_to_choice, list):
-        return doc_to_choice
-    import ast
-
-    import jinja2
-
-    return ast.literal_eval(jinja2.Template(doc_to_choice).render(**doc))
-
-
-def variant_process_results(directory, attribute_name, gold_indices, postprocess=None):
-    """Build the process_results function for one prompt variant.
-
-    `attribute_name` must be "process_<variant>", and <variant>.yaml in
-    `directory` provides the doc_to_choice whose strings are scored. Intended to
-    be returned from a module-level __getattr__, so a variant config wires itself
-    with `process_results: !function utils.process_<its own file stem>` and new
-    variants — with any choices — need no code changes.
-
-    This indirection exists because the harness calls a custom process_results
-    with only (doc, results): it never passes the config, so which variant's
-    choices were scored can only be carried by the function's identity.
-
-    gold_indices(doc) returns the indices of the correct choices; the optional
-    postprocess(metrics, predictions, doc) can add task-specific entries.
+    gold_indices(doc) returns the indices of the doc's correct choices (usually
+    just one); the optional postprocess(metrics, predictions, doc) can add
+    task-specific entries such as the (gold, prediction) pairs of F1.
     """
-    prefix = "process_"
-    if not attribute_name.startswith(prefix):
-        raise AttributeError(attribute_name)
-    yaml_path = os.path.join(directory, attribute_name[len(prefix) :] + ".yaml")
-    if not os.path.isfile(yaml_path):
-        raise AttributeError(f"{attribute_name}: no such config {yaml_path}")
-    with open(yaml_path) as fh:
-        doc_to_choice = yaml.load(fh, Loader=_ConfigLoader).get("doc_to_choice")
-    if doc_to_choice is None:
-        raise ValueError(f"{yaml_path} does not define doc_to_choice")
 
-    def process_results(doc, results):
-        choices = resolve_choices(doc_to_choice, doc)
+    def process_results(doc, results, choices):
         metrics, predictions = score_choices(results, choices, gold_indices(doc))
         if postprocess is not None:
             postprocess(metrics, predictions, doc)
@@ -80,25 +40,18 @@ def split_loglikelihoods(results, n_choices):
     """Split the flat result list into conditional and unconditional loglikelihoods.
 
     The harness sends one loglikelihood request per answer choice. When
-    acc_mutual_info is in the metric list, it appends one extra unconditional
-    ("", choice) request per choice after the conditional ones. It does not tell
-    process_results which case occurred, so the doubled length is the only signal
-    that the unconditional loglikelihoods (the PMI denominators) are present.
+    acc_mutual_info (or prob_correct_mutual_info) is in the metric list, it
+    appends one extra unconditional ("", choice) request per choice after the
+    conditional ones. It does not tell process_results which case occurred, so
+    the doubled length is the only signal that the unconditional loglikelihoods
+    (the PMI denominators) are present.
     """
     lls = [result[0] if isinstance(result, (tuple, list)) else result for result in results]
     if len(lls) not in (n_choices, 2 * n_choices):
         raise ValueError(
-            f"Expected {n_choices} or {2 * n_choices} loglikelihoods, got {len(lls)}; "
-            "do the choices passed to score_choices match the task's doc_to_choice?"
+            f"Expected {n_choices} or {2 * n_choices} loglikelihoods, got {len(lls)}"
         )
     return lls[:n_choices], lls[n_choices:]
-
-
-def softmax(scores):
-    max_score = max(scores)
-    exps = [math.exp(score - max_score) for score in scores]
-    total = sum(exps)
-    return [exp / total for exp in exps]
 
 
 def score_choices(results, choices, gold_indices):
@@ -136,5 +89,5 @@ def score_choices(results, choices, gold_indices):
         probs = softmax(lls)
         predictions[suffix] = pred
         metrics[f"acc{suffix}"] = int(pred in gold_indices)
-        metrics[f"prob_correct{suffix}"] = sum(probs[i] for i in gold_indices)
+        metrics[f"prob_correct{suffix}"] = float(sum(probs[i] for i in gold_indices))
     return metrics, predictions

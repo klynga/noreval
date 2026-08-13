@@ -4,4 +4,3 @@ task: norec_document_p2
 include: _norec_document_yaml
 doc_to_text: "Er polariteten til følgende anmeldelse positiv eller negativ?\nAnmeldelse: {{review}}\nAnmeldelsen er"
 doc_to_choice: ["negativ", "positiv"]
-process_results: !function utils.process_norec_document_p2

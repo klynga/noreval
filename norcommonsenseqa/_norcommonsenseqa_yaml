@@ -4,6 +4,7 @@ training_split: null
 validation_split: null
 test_split: train
 doc_to_target: "{{choices.label.index(answer)}}"
+process_results: !function utils.process_results
 metric_list:
   - metric: acc
     aggregation: mean
