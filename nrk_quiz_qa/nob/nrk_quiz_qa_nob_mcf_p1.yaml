@@ -1,0 +1,8 @@
+tag:
+  - nrk_quiz_qa_nob
+  - nrk_quiz_qa_nob_mcf
+task: nrk_quiz_qa_nob_mcf_p1
+dataset_name: nb
+include: _nrk_quiz_qa_nob_yaml
+doc_to_text: !function utils.mcf_p1_nb
+doc_to_choice: "{{choices.label}}"

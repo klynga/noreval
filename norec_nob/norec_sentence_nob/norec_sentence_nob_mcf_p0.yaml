@@ -1,0 +1,8 @@
+tag:
+  - norec_sentence_nob
+  - norec_sentence_nob_mcf
+dataset_path: ltg/norec_sentence
+task: norec_sentence_nob_mcf_p0
+include: _norec_sentence_nob_yaml
+doc_to_text: "Tekst: {{review}}\nEr sentimentet A. negativ eller B. positiv?\nSvar:"
+doc_to_choice: ["A", "B"]

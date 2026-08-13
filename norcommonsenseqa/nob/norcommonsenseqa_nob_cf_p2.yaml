@@ -1,0 +1,8 @@
+tag:
+  - norcommonsenseqa_nob
+  - norcommonsenseqa_nob_cf
+dataset_name: nb
+task: norcommonsenseqa_nob_cf_p2
+include: _norcommonsenseqa_nob_yaml
+doc_to_text: "Hva er svaret på følgende spørsmål: {{question}}\n\nSvar:"
+doc_to_choice: "{{choices.text}}"
