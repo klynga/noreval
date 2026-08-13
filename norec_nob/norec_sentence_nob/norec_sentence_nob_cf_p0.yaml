@@ -1,6 +1,8 @@
-tag: norec_sentence_nob
+tag:
+  - norec_sentence_nob
+  - norec_sentence_cf
 dataset_path: ltg/norec_sentence
-task: norec_sentence_nob_p0
+task: norec_sentence_nob_cf_p0
 include: _norec_sentence_nob_yaml
 doc_to_text: "Tekst: {{review}}\nSentiment:"
 doc_to_choice: ["negativ", "positiv"]

@@ -1,0 +1,8 @@
+tag:
+  - norec_document_nob
+  - norec_document_cf
+dataset_path: ltg/norec_document
+task: norec_document_nob_cf_p1
+include: _norec_document_nob_yaml
+doc_to_text: "Tekst: {{review}}\nHva er sentimentet i anmeldelsen?\nSvar:"
+doc_to_choice: ["negativ", "positiv"]
