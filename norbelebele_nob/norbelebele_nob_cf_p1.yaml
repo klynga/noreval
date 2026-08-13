@@ -1,4 +1,7 @@
-task: norbelebele_nob_p6
+tag:
+  - norbelebele_nob
+  - norbelebele_nob_cf
+task: norbelebele_nob_cf_p1
 include: _norbelebele_nob_yaml
 doc_to_text: "Bakgrunn: {{flores_passage}}\nSpørsmål:{{question}}\nRiktig svar:"
 doc_to_choice: "{{[mc_answer1, mc_answer2, mc_answer3, mc_answer4]}}"
