@@ -1,35 +1,128 @@
-def p0_nb(doc):
-    prompt = "Spørsmål: {question}\n\nSvar:"
-    return prompt.format(question=doc["question"])
+# Task-formation variants for nortruthfulqa_mc (Bokmål).
+#
+# Three multiple-choice formations share each prompt template (p0-p4):
+#   - cf     (cloze):    no options in the prompt; the full option text is the
+#                        continuation      -> doc_to_choice: mc1_targets.choices
+#   - hybrid:            options shown in the prompt WITHOUT labels; the full
+#                        option text is the continuation
+#                        -> doc_to_choice: mc1_targets.choices
+#   - mcf    (mult.-ch): options shown in the prompt WITH labels; only the
+#                        label is the continuation
+#                        -> doc_to_choice: !function utils.mcf_labels_nb
+#
+# The dataset has no answer labels, so labels (A, B, C, ...) are generated
+# positionally from the number of choices.
+
+import string
 
 
-def p1_nb(doc):
-    prompt = "Spørsmål: {question}\n\nSvaralternativer:{choices}\n\nSvar:"
-    choices = "".join(
-        list(map(lambda choice: f"\n- {choice}", doc["mc1_targets"]["choices"]))
+def _labels(doc):
+    n = len(doc["mc1_targets"]["choices"])
+    return list(string.ascii_uppercase[:n])
+
+
+def _unlabeled_choices(doc):
+    """Options as an unlabeled bullet list (used by hybrid formations)."""
+    return "".join(f"\n- {choice}" for choice in doc["mc1_targets"]["choices"])
+
+
+def _labeled_choices(doc):
+    """Options as a labeled list, e.g. 'A. ...' (used by mcf formations)."""
+    return "".join(
+        f"\n {label}. {choice}"
+        for label, choice in zip(_labels(doc), doc["mc1_targets"]["choices"])
     )
-    return prompt.format(question=doc["question"], choices=choices)
 
 
-def p2_nb(doc):
-    prompt = "Spørsmål: {question}\n\nHvilke av følgende alternativer er riktig svar på spørsmålet?{choices}"
-    choices = "".join(
-        list(map(lambda choice: f"\n- {choice}", doc["mc1_targets"]["choices"]))
+def mcf_labels_nb(doc):
+    """doc_to_choice for the mcf formations: the option labels only."""
+    return _labels(doc)
+
+
+# --- p0: "Spørsmål: {question}" / "Svar:" -----------------------------------
+def cf_p0_nb(doc):
+    return "Spørsmål: {question}\n\nSvar:".format(question=doc["question"])
+
+
+def hybrid_p0_nb(doc):
+    return "Spørsmål: {question}\n\nAlternativer:{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_unlabeled_choices(doc)
     )
-    return prompt.format(question=doc["question"], choices=choices)
 
 
-def p3_nb(doc):
-    prompt = "Gitt følgende spørsmål, hvilket av de mulige svarene under er riktig?\nSpørsmål: {question}\n{choices}"
-    choices = "".join(
-        list(map(lambda choice: f"\n- {choice}", doc["mc1_targets"]["choices"]))
+def mcf_p0_nb(doc):
+    return "Spørsmål: {question}\n\nAlternativer:{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_labeled_choices(doc)
     )
-    return prompt.format(question=doc["question"], choices=choices)
 
 
-def p4_nb(doc):
-    prompt = "{question}\nVelg et av følgende mulige svar:{choices}\n\nSvar:"
-    choices = "".join(
-        list(map(lambda choice: f"\n- {choice}", doc["mc1_targets"]["choices"]))
+# --- p1: "Svaralternativer:" ------------------------------------------------
+def cf_p1_nb(doc):
+    return "Spørsmål: {question}\n\nSvar:".format(question=doc["question"])
+
+
+def hybrid_p1_nb(doc):
+    return "Spørsmål: {question}\n\nSvaralternativer:{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_unlabeled_choices(doc)
     )
-    return prompt.format(question=doc["question"], choices=choices)
+
+
+def mcf_p1_nb(doc):
+    return "Spørsmål: {question}\n\nSvaralternativer:{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_labeled_choices(doc)
+    )
+
+
+# --- p2: "Hvilke av følgende alternativer er riktig svar på spørsmålet?" -----
+def cf_p2_nb(doc):
+    return "Spørsmål: {question}\n\nHva er riktig svar på spørsmålet?\n\nSvar:".format(
+        question=doc["question"]
+    )
+
+
+def hybrid_p2_nb(doc):
+    return "Spørsmål: {question}\n\nHvilke av følgende alternativer er riktig svar på spørsmålet?{choices}".format(
+        question=doc["question"], choices=_unlabeled_choices(doc)
+    )
+
+
+def mcf_p2_nb(doc):
+    return "Spørsmål: {question}\n\nHvilke av følgende alternativer er riktig svar på spørsmålet?{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_labeled_choices(doc)
+    )
+
+
+# --- p3: "Gitt følgende spørsmål, hvilket av de mulige svarene under ..." ----
+def cf_p3_nb(doc):
+    return "Gitt følgende spørsmål, hva er det riktige svaret?\nSpørsmål: {question}\n\nSvar:".format(
+        question=doc["question"]
+    )
+
+
+def hybrid_p3_nb(doc):
+    return "Gitt følgende spørsmål, hvilket av de mulige svarene under er riktig?\nSpørsmål: {question}\n{choices}".format(
+        question=doc["question"], choices=_unlabeled_choices(doc)
+    )
+
+
+def mcf_p3_nb(doc):
+    return "Gitt følgende spørsmål, hvilket av de mulige svarene under er riktig?\nSpørsmål: {question}\n{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_labeled_choices(doc)
+    )
+
+
+# --- p4: "Velg et av følgende mulige svar:" ---------------------------------
+def cf_p4_nb(doc):
+    return "{question}\n\nSvar:".format(question=doc["question"])
+
+
+def hybrid_p4_nb(doc):
+    return "{question}\nVelg et av følgende mulige svar:{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_unlabeled_choices(doc)
+    )
+
+
+def mcf_p4_nb(doc):
+    return "{question}\nVelg et av følgende mulige svar:{choices}\n\nSvar:".format(
+        question=doc["question"], choices=_labeled_choices(doc)
+    )
