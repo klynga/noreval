@@ -1,0 +1,8 @@
+tag:
+  - nrk_quiz_qa_nob
+  - nrk_quiz_qa_nob_hybrid
+task: nrk_quiz_qa_nob_hybrid_p2
+dataset_name: nb
+include: _nrk_quiz_qa_nob_yaml
+doc_to_text: !function utils.hybrid_p2_nb
+doc_to_choice: "{{choices.text}}"
