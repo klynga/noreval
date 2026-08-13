@@ -140,4 +140,5 @@ def bertscore_f1(references, predictions):
         references=references,
         model_type="bert-base-multilingual-cased",
         num_layers=9,
+        device="cpu",
     )["f1"][0]
