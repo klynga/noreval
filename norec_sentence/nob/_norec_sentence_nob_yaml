@@ -1,5 +1,6 @@
 include: ../_norec_sentence_yaml
 dataset_path: ltg/norec_sentence
+process_results: !function utils.process_results
 metadata:
   version: 1.2
   primary_metric: f1

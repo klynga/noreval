@@ -4,4 +4,4 @@ tag:
 task: noropenbookqa_nob_cf_p1
 include: _noropenbookqa_nob_yaml
 doc_to_text: "Faktatekst: {{fact}}\nSpørsmål til teksten: {{question_stem}}\n\nHva er riktig svar?"
-doc_to_choice: "{{choices.text}}"
+doc_to_choice: !function utils.choices_text

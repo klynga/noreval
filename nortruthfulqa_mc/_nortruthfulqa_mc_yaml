@@ -4,7 +4,6 @@ training_split: null
 validation_split: validation
 test_split: null
 doc_to_target: 0
-doc_to_choice: "{{mc1_targets.choices}}"
 metric_list:
   - metric: acc
     aggregation: mean
@@ -13,6 +12,24 @@ metric_list:
     aggregation: mean
     higher_is_better: true
   - metric: acc_mutual_info
+    aggregation: mean
+    higher_is_better: true
+  - metric: prob_correct
+    aggregation: mean
+    higher_is_better: true
+  - metric: prob_correct_norm
+    aggregation: mean
+    higher_is_better: true
+  - metric: prob_correct_mutual_info
+    aggregation: mean
+    higher_is_better: true
+  - metric: loglikelihood_correct
+    aggregation: mean
+    higher_is_better: true
+  - metric: loglikelihood_correct_norm
+    aggregation: mean
+    higher_is_better: true
+  - metric: loglikelihood_correct_mutual_info
     aggregation: mean
     higher_is_better: true
 metadata:

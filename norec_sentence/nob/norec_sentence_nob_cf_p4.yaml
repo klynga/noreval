@@ -4,4 +4,4 @@ tag:
 task: norec_sentence_nob_cf_p4
 include: _norec_sentence_nob_yaml
 doc_to_text: "{{review}}\nHva slags sentiment har denne setningen?\nSvar:"
-doc_to_choice: ["negativ", "positiv"]
+doc_to_choice: !function utils.choices_negativ_positiv

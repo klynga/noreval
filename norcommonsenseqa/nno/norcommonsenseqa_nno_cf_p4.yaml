@@ -4,4 +4,4 @@ tag:
 task: norcommonsenseqa_nno_cf_p4
 include: _norcommonsenseqa_nno_yaml
 doc_to_text: "{{question}}\n\nKva er det rette svaret?\n\nSvar:"
-doc_to_choice: "{{choices.text}}"
+doc_to_choice: !function utils.choices_text

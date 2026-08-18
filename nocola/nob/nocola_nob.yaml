@@ -1,5 +1,7 @@
 task: nocola_nob
 include: ../_nocola_yaml
+doc_to_choice: !function utils.choices
+process_results: !function utils.process_results
 metadata:
   version: 1.2
   primary_metric: acc

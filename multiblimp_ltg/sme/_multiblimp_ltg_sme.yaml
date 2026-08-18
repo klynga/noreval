@@ -17,6 +17,30 @@ aggregate_metric_list:
   - metric: acc
     aggregation: mean
     weight_by_size: True
+  - metric: acc_norm
+    aggregation: mean
+    weight_by_size: True
+  - metric: acc_mutual_info
+    aggregation: mean
+    weight_by_size: True
+  - metric: prob_correct
+    aggregation: mean
+    weight_by_size: True
+  - metric: prob_correct_norm
+    aggregation: mean
+    weight_by_size: True
+  - metric: prob_correct_mutual_info
+    aggregation: mean
+    weight_by_size: True
+  - metric: loglikelihood_correct
+    aggregation: mean
+    weight_by_size: True
+  - metric: loglikelihood_correct_norm
+    aggregation: mean
+    weight_by_size: True
+  - metric: loglikelihood_correct_mutual_info
+    aggregation: mean
+    weight_by_size: True
 metadata:
   version: 1.2
   primary_metric: acc

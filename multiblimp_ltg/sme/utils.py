@@ -37,3 +37,21 @@ def filter_dataset_pl_du(dataset):
 def filter_dataset_du_pl(dataset):
     return dataset.filter(lambda example: example["feature_vals"] == "DU -> PL")
 
+
+
+# --- accuracy / probability metrics (see noreval_metrics.py) ---------------
+import os
+import sys
+
+# noreval_metrics.py lives at the repository root, two levels up thanks to the
+# consistent task/language/ file structure
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+from noreval_metrics import make_process_results
+
+
+def choices(doc):
+    return [doc["sen"], doc["wrong_sen"]]
+
+
+# doc_to_choice is [sen, wrong_sen], so the correct choice is always index 0
+process_results = make_process_results(choices, lambda doc: [0])

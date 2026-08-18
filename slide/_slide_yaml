@@ -5,7 +5,6 @@ validation_split: validation
 fewshot_split: validation
 output_type: multiple_choice
 doc_to_target: "{{correct_indices[0]}}"
-process_results: !function utils.process_multilabel_word
 metric_list:
   - metric: acc
     aggregation: mean
@@ -14,6 +13,24 @@ metric_list:
     aggregation: mean
     higher_is_better: true
   - metric: acc_mutual_info
+    aggregation: mean
+    higher_is_better: true
+  - metric: prob_correct
+    aggregation: mean
+    higher_is_better: true
+  - metric: prob_correct_norm
+    aggregation: mean
+    higher_is_better: true
+  - metric: prob_correct_mutual_info
+    aggregation: mean
+    higher_is_better: true
+  - metric: loglikelihood_correct
+    aggregation: mean
+    higher_is_better: true
+  - metric: loglikelihood_correct_norm
+    aggregation: mean
+    higher_is_better: true
+  - metric: loglikelihood_correct_mutual_info
     aggregation: mean
     higher_is_better: true
 metadata:

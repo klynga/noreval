@@ -1,5 +1,6 @@
 tag: norbelebele_nob
 include: ../_norbelebele_yaml
+process_results: !function utils.process_results
 metadata:
   version: 1.2
   primary_metric: acc

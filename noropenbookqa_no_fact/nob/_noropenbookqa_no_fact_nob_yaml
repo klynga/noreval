@@ -1,5 +1,6 @@
 include: ../_noropenbookqa_no_fact_yaml
 dataset_name: nb
+process_results: !function utils.process_results
 metadata:
   version: 1.2
   primary_metric: acc

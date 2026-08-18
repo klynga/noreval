@@ -126,3 +126,22 @@ def mcf_p4_nn(doc):
     return "{question}\nVel eit av følgande moglege svar:{choices}\n\nSvar:".format(
         question=doc["question"], choices=_labeled_choices(doc)
     )
+
+
+# --- accuracy / probability metrics (see noreval_metrics.py) ---------------
+import os
+import sys
+
+# noreval_metrics.py lives at the repository root, two levels up thanks to the
+# consistent task/language/ file structure
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+from noreval_metrics import make_process_results
+
+
+def choices_text(doc):
+    return doc["mc1_targets"]["choices"]
+
+
+# doc_to_choice puts the single correct answer first, so gold is index 0
+process_results = make_process_results(choices_text, lambda doc: [0])          # cf / hybrid
+process_results_mcf = make_process_results(mcf_labels_nn, lambda doc: [0])

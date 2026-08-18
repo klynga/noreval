@@ -4,4 +4,4 @@ tag:
 task: slide_nob_nno_swe_dan_cf_p3
 include: _slide_nob_nno_swe_dan_yaml
 doc_to_text: "Setning å vurdere: {{text}}\nHvilket språk er teksten skrevet på?"
-doc_to_choice: ["bokmål", "nynorsk", "dansk", "svensk", "et annet språk"]
+doc_to_choice: !function utils.choices_words

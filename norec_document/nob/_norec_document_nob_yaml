@@ -1,5 +1,6 @@
 include: ../_norec_document_yaml
 dataset_path: ltg/norec_document
+process_results: !function utils.process_results
 metadata:
   version: 1.2
   primary_metric: f1
