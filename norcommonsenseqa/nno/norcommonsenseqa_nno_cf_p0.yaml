@@ -1,7 +1,6 @@
 tag:
   - norcommonsenseqa_nno
   - norcommonsenseqa_nno_cf
-dataset_name: nn
 task: norcommonsenseqa_nno_cf_p0
 include: _norcommonsenseqa_nno_yaml
 doc_to_text: "Spørsmål: {{question}}\n\nSvar:"

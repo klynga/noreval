@@ -1,0 +1,11 @@
+include: ../_translation_yaml
+dataset_path: ltg/saami-tatoeba
+tag: translation_sme_nob
+doc_to_target: text_nob
+training_split: test
+metadata:
+  version: 1.2
+  primary_metric: bleu
+  random_baseline: 0.0
+  category: machine_translation
+  language: [nob, sme]

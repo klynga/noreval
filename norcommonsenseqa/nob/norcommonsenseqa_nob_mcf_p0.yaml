@@ -1,7 +1,6 @@
 tag:
   - norcommonsenseqa_nob
   - norcommonsenseqa_nob_mcf
-dataset_name: nb
 task: norcommonsenseqa_nob_mcf_p0
 include: _norcommonsenseqa_nob_yaml
 doc_to_text: "Spørsmål: {{question}}\n\nAlternativer:\n A: {{choices.text[0]}}\n B: {{choices.text[1]}}\n C: {{choices.text[2]}}\n D: {{choices.text[3]}}\n E: {{choices.text[4]}}\n\nSvar:"

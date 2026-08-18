@@ -1,0 +1,8 @@
+tag: norbelebele_nob
+include: ../_norbelebele_yaml
+metadata:
+  version: 1.2
+  primary_metric: acc
+  random_baseline: 0.25
+  category: language_understanding
+  language: nob

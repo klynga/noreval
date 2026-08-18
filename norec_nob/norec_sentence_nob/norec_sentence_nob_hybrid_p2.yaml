@@ -1,8 +1,0 @@
-tag:
-  - norec_sentence_nob
-  - norec_sentence_nob_hybrid
-dataset_path: ltg/norec_sentence
-task: norec_sentence_nob_hybrid_p2
-include: _norec_sentence_nob_yaml
-doc_to_text: "{{review}}\nHva slags sentiment uttrykker anmelderen, \"negativ\" eller \"positiv\"?"
-doc_to_choice: ["negativ", "positiv"]

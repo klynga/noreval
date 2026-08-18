@@ -1,13 +1,13 @@
 # NorEval task metadata
 
-Summary of the `metadata` blocks in the task configs (all at version 1.1).
+Summary of the `metadata` blocks in the task configs (all at version 1.2).
 
 | Task | Category | Language(s) | Primary metric | Random baseline |
 |:---|:---|:---|:---|:---|
 | `ask_gec_nob` | linguistic_knowledge | nob | errant_f05 | 0.0 |
 | `ncb_nob` | linguistic_knowledge | nob | acc | 0.5 |
 | `nocola_nob` | linguistic_knowledge | nob | acc | 0.5 |
-| `multiblimp_sme` | linguistic_knowledge | sme | acc | 0.5 |
+| `multiblimp_ltg_sme` | linguistic_knowledge | sme | acc | 0.5 |
 | `noridiom_nob` | linguistic_knowledge | nob | em_first | 0.0 |
 | `noridiom_nno` | linguistic_knowledge | nno | em_first | 0.0 |
 | `slide_nob_nno_swe_dan` | linguistic_knowledge | nob, nno, swe, dan | acc | 0.21289208633093526 |
@@ -31,11 +31,11 @@ Summary of the `metadata` blocks in the task configs (all at version 1.1).
 | `norsummarize_instruct_nob` | generation_and_summarization | nob | bleu | 0.0 |
 | `norsumm_nob` | generation_and_summarization | nob | rougeL_max | 0.0 |
 | `norsumm_nno` | generation_and_summarization | nno | rougeL_max | 0.0 |
-| `norsumm_translation_nob_nno` | generation_and_summarization | nob, nno | bleu | 0.0 |
-| `norsumm_translation_nno_nob` | generation_and_summarization | nob, nno | bleu | 0.0 |
-| `tatoeba_eng_nob` | machine_translation | nob, eng | bleu | 0.0 |
-| `tatoeba_eng_nno` | machine_translation | nno, eng | bleu | 0.0 |
-| `tatoeba_nob_eng` | machine_translation | nob, eng | bleu | 0.0 |
-| `tatoeba_nno_eng` | machine_translation | nno, eng | bleu | 0.0 |
-| `tatoeba_nob_sme` | machine_translation | nob, sme | bleu | 0.0 |
-| `tatoeba_sme_nob` | machine_translation | nob, sme | bleu | 0.0 |
+| `translation_nob_nno` | machine_translation | nob, nno | bleu | 0.0 |
+| `translation_nno_nob` | machine_translation | nob, nno | bleu | 0.0 |
+| `translation_eng_nob` | machine_translation | nob, eng | bleu | 0.0 |
+| `translation_eng_nno` | machine_translation | nno, eng | bleu | 0.0 |
+| `translation_nob_eng` | machine_translation | nob, eng | bleu | 0.0 |
+| `translation_nno_eng` | machine_translation | nno, eng | bleu | 0.0 |
+| `translation_nob_sme` | machine_translation | nob, sme | bleu | 0.0 |
+| `translation_sme_nob` | machine_translation | nob, sme | bleu | 0.0 |

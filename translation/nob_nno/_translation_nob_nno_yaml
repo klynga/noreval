@@ -1,0 +1,11 @@
+include: ../_translation_yaml
+dataset_path: ltg/norsumm-nob-nno-translation
+tag: translation_nob_nno
+doc_to_target: text_nno
+training_split: test
+metadata:
+  version: 1.2
+  primary_metric: bleu
+  random_baseline: 0.0
+  category: machine_translation
+  language: [nob, nno]

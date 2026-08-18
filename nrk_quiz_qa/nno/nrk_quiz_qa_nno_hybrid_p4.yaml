@@ -2,7 +2,6 @@ tag:
   - nrk_quiz_qa_nno
   - nrk_quiz_qa_nno_hybrid
 task: nrk_quiz_qa_nno_hybrid_p4
-dataset_name: nn
 include: _nrk_quiz_qa_nno_yaml
 doc_to_text: !function utils.hybrid_p4_nn
 doc_to_choice: "{{choices.text}}"

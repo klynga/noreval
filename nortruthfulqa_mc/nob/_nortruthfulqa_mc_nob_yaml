@@ -1,0 +1,8 @@
+include: ../_nortruthfulqa_mc_yaml
+dataset_name: nb
+metadata:
+  version: 1.2
+  primary_metric: acc
+  random_baseline: 0.23170337745132827
+  category: world_knowledge_and_reasoning
+  language: nob

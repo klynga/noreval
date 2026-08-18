@@ -1,0 +1,8 @@
+task: ncb_nob
+include: ../_ncb_yaml
+metadata:
+  version: 1.2
+  primary_metric: acc
+  random_baseline: 0.5
+  category: linguistic_knowledge
+  language: nob

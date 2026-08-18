@@ -1,8 +1,0 @@
-tag:
-  - noropenbookqa_no_fact_nob
-  - noropenbookqa_no_fact_nob_cf
-task: noropenbookqa_no_fact_nob_cf_p3
-dataset_name: nb
-include: _noropenbookqa_no_fact_nob_yaml
-doc_to_text: "Spørsmål: {{question_stem}}\n\nSvar:"
-doc_to_choice: "{{choices.text}}"

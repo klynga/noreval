@@ -2,7 +2,6 @@ tag:
   - noropenbookqa_nob
   - noropenbookqa_nob_cf
 task: noropenbookqa_nob_cf_p0
-dataset_name: nb
 include: _noropenbookqa_nob_yaml
 doc_to_text: "{{fact}}\n{{question_stem}}"
 doc_to_choice: "{{choices.text}}"

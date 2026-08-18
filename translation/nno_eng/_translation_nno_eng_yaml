@@ -1,0 +1,10 @@
+include: ../_translation_yaml
+tag: translation_nno_eng
+dataset_name: eng-nno
+doc_to_target: sourceString
+metadata:
+  version: 1.2
+  primary_metric: bleu
+  random_baseline: 0.0
+  category: machine_translation
+  language: [nno, eng]

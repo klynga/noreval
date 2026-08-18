@@ -1,0 +1,8 @@
+include: ../_norec_document_yaml
+dataset_path: ltg/norec_document
+metadata:
+  version: 1.2
+  primary_metric: f1
+  random_baseline: 0.4850709806
+  category: language_understanding
+  language: nob

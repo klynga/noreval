@@ -1,6 +1,8 @@
 include: ../_noridiom_yaml
+tag: noridiom_nob
+process_docs: !function utils.filter_dataset_nb
 metadata:
-  version: 1.1
+  version: 1.2
   primary_metric: em_first
   random_baseline: 0.0
   category: linguistic_knowledge

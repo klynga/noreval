@@ -1,8 +1,0 @@
-tag:
-  - norec_document_nob
-  - norec_document_nob_hybrid
-dataset_path: ltg/norec_document
-task: norec_document_nob_hybrid_p1
-include: _norec_document_nob_yaml
-doc_to_text: "Tekst: {{review}}\nEr anmeldelsen \"positiv\" eller \"negativ\"?"
-doc_to_choice: ["negativ", "positiv"]
