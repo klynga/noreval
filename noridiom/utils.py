@@ -32,9 +32,9 @@ def f1(prediction, completion):
     return f1
 
 
-def process_results(doc, results):
-    prediction = normalize(results[0])
-    prediction_first_word = get_first_word(results[0])
+def _score_one(doc, completion_text):
+    prediction = normalize(completion_text)
+    prediction_first_word = get_first_word(completion_text)
     completions = [normalize(completion) for completion in doc["accepted_completions"]]
 
     exact_match_first_word = np.nanmax(
@@ -47,4 +47,11 @@ def process_results(doc, results):
         [f1(prediction=prediction, completion=completion) for completion in completions]
     )
     return {"em_first": exact_match_first_word, "em": exact_match, "fscore": fscore}
+
+
+def process_results(doc, results):
+    # results[0] holds the K sampled completions (repeats + take_first_k filter);
+    # the question-level score is the mean over samples (arXiv:2411.00640, §3.1)
+    scored = [_score_one(doc, completion) for completion in results[0]]
+    return {key: sum(s[key] for s in scored) / len(scored) for key in scored[0]}
 

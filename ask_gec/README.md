@@ -26,10 +26,12 @@ lm_eval \
   --num_fewshot 0
 ```
 
-`errant_f05` is reported in `results.json` alongside every other task. It carries no
-stderr: ERRANT scores the corpus as a whole, and the aggregation is deliberately
-excluded from the bootstrappable metrics in `lm_eval.api.metrics`, so it runs
-exactly once rather than `bootstrap_iters` times.
+`errant_f05` is reported in `results.json` alongside every other task, with its
+standard error under `errant_f05_stderr`: the expensive ERRANT corpus pass runs
+exactly once (cached on the item content), per-sentence TP/FP/FN counts are
+recovered from the M2 files and verified against `errant_compare`'s corpus
+score, and the stderr is a seeded bootstrap over documents — each document's K
+sampled corrections are resampled together.
 
 If ERRANT or the spaCy model is missing, the metric is reported as `NaN` and the
 reason is logged, so an incomplete environment costs this one metric rather than

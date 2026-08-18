@@ -9,7 +9,10 @@ process_results: !function utils.process_results
 generation_kwargs:
   until:
     - "\n"
-  do_sample: false
+  do_sample: true
+  temperature: 1.0
+  top_p: 1.0
+  top_k: 0
   max_new_tokens: 256
 metric_list:
   - metric: rougeL_max

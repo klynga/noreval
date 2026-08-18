@@ -27,6 +27,7 @@ def _add_f1_pairs(metrics, predictions, doc):
     # (prediction, gold) pairs, aggregated by the macro-F1 in ../utils.py
     for suffix, pred in predictions.items():
         metrics[f"f1{suffix}"] = (pred, doc["sentiment"])
+        metrics[f"f1{suffix}_stderr"] = (pred, doc["sentiment"])
 
 
 process_results = make_process_results(choices_negativ_positiv, gold, _add_f1_pairs)

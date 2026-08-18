@@ -34,8 +34,7 @@ def clean_summaries(dataset):
     return dataset.map(clean_doc)
 
 
-def process_results(doc, results):
-    completion = results[0]
+def _score_one(doc, completion):
     references = doc["summaries"]
 
     bleu_scores = [bleu([[reference]], [completion]) for reference in references]
@@ -62,6 +61,13 @@ def process_results(doc, results):
         "bertscore_f1_max": bertscore_f1_max,
         "bertscore_f1_avg": bertscore_f1_avg,
     }
+
+
+def process_results(doc, results):
+    # results[0] holds the K sampled summaries (repeats + take_first_k filter);
+    # the question-level score is the mean over samples (arXiv:2411.00640, §3.1)
+    scored = [_score_one(doc, completion) for completion in results[0]]
+    return {key: sum(s[key] for s in scored) / len(scored) for key in scored[0]}
 
 
 def bleu(refs, preds):

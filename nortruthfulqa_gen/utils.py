@@ -42,8 +42,7 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
     return dataset.map(preprocess_function)
 
 
-def process_results(doc, results):
-    completion = results[0]
+def _score_one(doc, completion):
     true_refs, false_refs = doc["correct_answers"], doc["incorrect_answers"]
     all_refs = true_refs + false_refs
 
@@ -150,3 +149,10 @@ def rouge(refs, preds):
         aggregator.add_scores(scorer.score(ref, pred))
     result = aggregator.aggregate()
     return {type: result[type].mid.fmeasure * 100 for type in rouge_types}
+
+
+def process_results(doc, results):
+    # results[0] holds the K sampled answers (repeats + take_first_k filter);
+    # the question-level score is the mean over samples (arXiv:2411.00640, §3.1)
+    scored = [_score_one(doc, completion) for completion in results[0]]
+    return {key: sum(s[key] for s in scored) / len(scored) for key in scored[0]}

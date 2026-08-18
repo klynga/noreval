@@ -6,10 +6,13 @@ maps onto the harness's passthrough-metric pattern used by `bleu`/`chrf` in
 `lm_eval/api/metrics.py` -- `process_results` emits one tuple per document and
 `errant_agg` receives the whole list and scores it once.
 
-`errant_agg` is deliberately absent from the bootstrappable list in
-`lm_eval.api.metrics.stderr_for_metric`, so the harness calls it exactly once
-and reports no stderr for `errant_f05`. Adding it there would invoke ERRANT
-`bootstrap_iters` times.
+The harness computes no stderr for custom aggregations, so the standard error
+is provided as the companion metric `errant_f05_stderr`: ERRANT still runs
+exactly once (the corpus pass is cached on the item content), per-sentence
+TP/FP/FN counts are recovered from the two M2 files, verified against
+`errant_compare`'s corpus score, and bootstrapped over documents
+(arXiv:2411.00640 -- questions are the sampling unit, so a document's K
+sampled corrections are resampled together).
 
 The subprocess calls and the prediction normalisation mirror `errant.py` in this
 directory: predictions are normalised with `.replace("\\n\\n", "\\n")` and
@@ -49,13 +52,20 @@ def process_results(doc, results):
     sentence rather than as declining to correct it -- a model that generates
     nothing should not be credited with recognising a correct sentence.
     """
-    return {
-        "errant_f05": (
-            doc["source"],
-            doc["correction"],
-            results[0].replace("\n\n", "\n"),
-        )
-    }
+    triples = [
+        (doc["source"], doc["correction"], prediction.replace("\n\n", "\n"))
+        for prediction in results[0]
+    ]
+    return {"errant_f05": triples, "errant_f05_stderr": triples}
+
+
+BOOTSTRAP_ITERS = 1000
+BOOTSTRAP_SEED = 1234
+
+# the corpus pass is expensive (spaCy parses every sentence), and the harness
+# aggregates `errant_f05` and `errant_f05_stderr` separately over equal item
+# lists -- cache the corpus result on the item content so ERRANT runs once
+_CORPUS_CACHE = {}
 
 
 def errant_agg(items):
@@ -66,14 +76,85 @@ def errant_agg(items):
     aggregates only after every task has finished generating.
     """
     try:
-        return _errant_f05(items)
+        return _errant_corpus(items)[0]
     except Exception as exc:
         logger.error("ERRANT evaluation failed for ask_gec_nob: %s", exc)
         return float("nan")
 
 
-def _errant_f05(items):
-    sources, targets, predictions = (list(field) for field in zip(*items))
+def errant_f05_stderr(items):
+    """Question-level bootstrap standard error of the corpus F0.5.
+
+    Documents (with their K sampled corrections) are resampled with
+    replacement; each replicate's F0.5 is recomputed from the pooled
+    per-sentence TP/FP/FN counts recovered from the M2 files.
+    """
+    try:
+        _, doc_counts = _errant_corpus(items)
+        if doc_counts is None:
+            return float("nan")
+        import random
+        import statistics
+
+        rng = random.Random(BOOTSTRAP_SEED)
+        n = len(doc_counts)
+        replicates = []
+        for _ in range(BOOTSTRAP_ITERS):
+            tp = fp = fn = 0
+            for i in (rng.randrange(n) for _ in range(n)):
+                tp += doc_counts[i][0]
+                fp += doc_counts[i][1]
+                fn += doc_counts[i][2]
+            replicates.append(_f05(tp, fp, fn))
+        return statistics.stdev(replicates)
+    except Exception as exc:
+        logger.error("ERRANT stderr bootstrap failed for ask_gec_nob: %s", exc)
+        return float("nan")
+
+
+def _f05(tp, fp, fn):
+    # computeFScore in errant's compare_m2: an empty side counts as perfect
+    p = tp / (tp + fp) if tp + fp else 1.0
+    r = tp / (tp + fn) if tp + fn else 1.0
+    return 1.25 * p * r / (0.25 * p + r) if 0.25 * p + r else 0.0
+
+
+def _edit_sets(m2_text):
+    """Per-sentence sets of (start, end, correction) edits from an M2 file.
+
+    `-lev` alignment writes a single annotator per sentence, and
+    `errant_compare`'s default mode scores span-based correction, so an edit's
+    identity is exactly this triple; `noop` entries mark edit-free sentences
+    and are not edits.
+    """
+    sentences = []
+    for block in m2_text.strip("\n").split("\n\n"):
+        edits = set()
+        for line in block.split("\n"):
+            if not line.startswith("A "):
+                continue
+            span, etype, correction = line[2:].split("|||")[:3]
+            if etype == "noop":
+                continue
+            start, end = span.split()
+            edits.add((int(start), int(end), correction))
+        sentences.append(edits)
+    return sentences
+
+
+def _errant_corpus(items):
+    key = hash(tuple(triple for doc_triples in items for triple in doc_triples))
+    if key not in _CORPUS_CACHE:
+        _CORPUS_CACHE[key] = _run_errant(items)
+    return _CORPUS_CACHE[key]
+
+
+def _run_errant(items):
+    # each document contributes its K sampled corrections; the corpus is pooled
+    # over samples, so every source sentence appears K times
+    doc_sizes = [len(doc_triples) for doc_triples in items]
+    flat = [triple for doc_triples in items for triple in doc_triples]
+    sources, targets, predictions = (list(field) for field in zip(*flat))
     _check_no_newlines(predictions)
 
     parallel = _command("errant_parallel")
@@ -108,10 +189,39 @@ def _errant_f05(items):
             compare + ["-ref", m2["targets"], "-hyp", m2["predictions"]],
             "errant_compare",
         )
+        with open(m2["targets"], encoding="utf-8") as f:
+            ref_edits = _edit_sets(f.read())
+        with open(m2["predictions"], encoding="utf-8") as f:
+            hyp_edits = _edit_sets(f.read())
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    return _parse_f05(output)
+    corpus_f05 = _parse_f05(output)
+
+    # per-sentence counts, grouped back into per-document sums for the bootstrap
+    counts = [
+        (len(hyp & ref), len(hyp - ref), len(ref - hyp))
+        for hyp, ref in zip(hyp_edits, ref_edits, strict=True)
+    ]
+    doc_counts, offset = [], 0
+    for size in doc_sizes:
+        doc = counts[offset : offset + size]
+        doc_counts.append(tuple(sum(c[i] for c in doc) for i in range(3)))
+        offset += size
+
+    # self-check: the recovered counts must reproduce errant_compare's number
+    # (it prints 4 decimals); otherwise report the corpus score without a stderr
+    tp, fp, fn = (sum(c[i] for c in doc_counts) for i in range(3))
+    if abs(_f05(tp, fp, fn) - corpus_f05) > 1e-3:
+        logger.error(
+            "recovered per-sentence ERRANT counts give F0.5=%.4f but "
+            "errant_compare reports %.4f; skipping the bootstrap stderr",
+            _f05(tp, fp, fn),
+            corpus_f05,
+        )
+        return corpus_f05, None
+
+    return corpus_f05, doc_counts
 
 
 def _check_no_newlines(predictions):
