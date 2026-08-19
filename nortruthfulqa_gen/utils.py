@@ -1,7 +1,5 @@
 import datasets
 import numpy as np
-import sacrebleu
-from rouge_score import rouge_scorer, scoring
 
 
 try:
@@ -128,8 +126,6 @@ def rouge(refs, preds):
         A `list` of predicted `strs`.
     """
     rouge_types = ["rouge1", "rouge2", "rougeLsum"]
-    scorer = rouge_scorer.RougeScorer(rouge_types)
-    # Add newlines between sentences to correctly compute `rougeLsum`.
 
     global ROUGE_SCORER
     if ROUGE_SCORER is None:
@@ -152,7 +148,6 @@ def rouge(refs, preds):
 
 
 def process_results(doc, results):
-    # results[0] holds the K sampled answers (repeats + take_first_k filter);
-    # the question-level score is the mean over samples (arXiv:2411.00640, §3.1)
+    # results[0] holds the K sampled generations; average their scores
     scored = [_score_one(doc, completion) for completion in results[0]]
     return {key: sum(s[key] for s in scored) / len(scored) for key in scored[0]}

@@ -4,7 +4,6 @@ from evaluate import load
 
 
 try:
-    # import bert_score
     import bert_score
     import sacrebleu
     from rouge_score import rouge_scorer, scoring
@@ -64,8 +63,7 @@ def _score_one(doc, completion):
 
 
 def process_results(doc, results):
-    # results[0] holds the K sampled summaries (repeats + take_first_k filter);
-    # the question-level score is the mean over samples (arXiv:2411.00640, §3.1)
+    # results[0] holds the K sampled generations; average their scores
     scored = [_score_one(doc, completion) for completion in results[0]]
     return {key: sum(s[key] for s in scored) / len(scored) for key in scored[0]}
 

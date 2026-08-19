@@ -132,8 +132,7 @@ def mcf_p4_nn(doc):
 import os
 import sys
 
-# noreval_metrics.py lives at the repository root, two levels up thanks to the
-# consistent task/language/ file structure
+# noreval_metrics.py lives at the repository root, two levels up
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 from noreval_metrics import make_process_results
 

@@ -1,25 +1,15 @@
 """ERRANT scoring for `ask_gec_nob`, run inside lm-evaluation-harness.
 
-ERRANT is a corpus-level metric: it aligns every source/target and
-source/prediction pair into M2 files and compares them in a single pass. That
-maps onto the harness's passthrough-metric pattern used by `bleu`/`chrf` in
-`lm_eval/api/metrics.py` -- `process_results` emits one tuple per document and
-`errant_agg` receives the whole list and scores it once.
+ERRANT is corpus-level: the pooled source/target and source/prediction pairs
+are aligned into M2 files and compared in a single pass, cached on the item
+content so the pass runs once per evaluation.  `errant_f05_stderr` carries the
+standard error: per-sentence TP/FP/FN counts are recovered from the M2 files,
+verified against `errant_compare`'s corpus score, and bootstrapped over
+documents.
 
-The harness computes no stderr for custom aggregations, so the standard error
-is provided as the companion metric `errant_f05_stderr`: ERRANT still runs
-exactly once (the corpus pass is cached on the item content), per-sentence
-TP/FP/FN counts are recovered from the two M2 files, verified against
-`errant_compare`'s corpus score, and bootstrapped over documents
-(arXiv:2411.00640 -- questions are the sampling unit, so a document's K
-sampled corrections are resampled together).
-
-The subprocess calls and the prediction normalisation mirror `errant.py` in this
-directory: predictions are normalised with `.replace("\\n\\n", "\\n")` and
-nothing else. An empty prediction stays empty, is written as a blank line, and
-is scored as deleting the sentence -- a model that generates nothing must not
-be credited with recognising an already-correct sentence.
-
+Predictions are normalised with `.replace("\n\n", "\n")` and nothing else,
+matching `errant.py` in this directory: an empty prediction stays empty and is
+scored as deleting the sentence.
 """
 
 import importlib.util
@@ -45,13 +35,7 @@ ERRANT_COMMANDS = {
 
 
 def process_results(doc, results):
-    """Emit the per-document triple that `errant_agg` scores as a corpus.
-
-    Normalisation matches `ask_gec_nob/errant.py`: collapse blank lines and nothing
-    else. An empty prediction stays empty, so ERRANT scores it as deleting the
-    sentence rather than as declining to correct it -- a model that generates
-    nothing should not be credited with recognising a correct sentence.
-    """
+    """Emit the per-document triples that `errant_agg` scores as a corpus."""
     triples = [
         (doc["source"], doc["correction"], prediction.replace("\n\n", "\n"))
         for prediction in results[0]
@@ -62,18 +46,16 @@ def process_results(doc, results):
 BOOTSTRAP_ITERS = 1000
 BOOTSTRAP_SEED = 1234
 
-# the corpus pass is expensive (spaCy parses every sentence), and the harness
-# aggregates `errant_f05` and `errant_f05_stderr` separately over equal item
-# lists -- cache the corpus result on the item content so ERRANT runs once
+# `errant_f05` and `errant_f05_stderr` aggregate equal item lists separately;
+# cache the expensive corpus pass on the item content
 _CORPUS_CACHE = {}
 
 
 def errant_agg(items):
-    """Corpus-level ERRANT F0.5 over every document in the task.
+    """Corpus-level ERRANT F0.5.
 
-    Returns NaN rather than raising so that a broken ERRANT installation costs
-    a single metric instead of the whole run's results, which the harness
-    aggregates only after every task has finished generating.
+    Returns NaN rather than raising, so a broken ERRANT installation costs one
+    metric rather than the whole run's results.
     """
     try:
         return _errant_corpus(items)[0]
@@ -83,12 +65,9 @@ def errant_agg(items):
 
 
 def errant_f05_stderr(items):
-    """Question-level bootstrap standard error of the corpus F0.5.
-
-    Documents (with their K sampled corrections) are resampled with
-    replacement; each replicate's F0.5 is recomputed from the pooled
-    per-sentence TP/FP/FN counts recovered from the M2 files.
-    """
+    """Bootstrap standard error of the corpus F0.5: documents are resampled
+    with replacement and each replicate is recomputed from the per-sentence
+    TP/FP/FN counts."""
     try:
         _, doc_counts = _errant_corpus(items)
         if doc_counts is None:
@@ -150,8 +129,7 @@ def _errant_corpus(items):
 
 
 def _run_errant(items):
-    # each document contributes its K sampled corrections; the corpus is pooled
-    # over samples, so every source sentence appears K times
+    # every source sentence appears once per sampled correction
     doc_sizes = [len(doc_triples) for doc_triples in items]
     flat = [triple for doc_triples in items for triple in doc_triples]
     sources, targets, predictions = (list(field) for field in zip(*flat))
@@ -209,8 +187,8 @@ def _run_errant(items):
         doc_counts.append(tuple(sum(c[i] for c in doc) for i in range(3)))
         offset += size
 
-    # self-check: the recovered counts must reproduce errant_compare's number
-    # (it prints 4 decimals); otherwise report the corpus score without a stderr
+    # the recovered counts must reproduce errant_compare's number (printed
+    # with 4 decimals); otherwise skip the stderr
     tp, fp, fn = (sum(c[i] for c in doc_counts) for i in range(3))
     if abs(_f05(tp, fp, fn) - corpus_f05) > 1e-3:
         logger.error(
