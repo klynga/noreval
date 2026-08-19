@@ -1,18 +1,11 @@
-"""Pooled corpus BLEU/chrF over K sampled translations per source, with
-question-level bootstrap standard errors.
+"""Pooled corpus BLEU/chrF over the K sampled translations per source.
 
-With `repeats: K` and the take_first_k filter, process_results receives the
-K sampled outputs of one document and emits K (reference, prediction)
-pairs.  The aggregations pool the pairs of all documents, so the corpus
-metric is computed over a corpus in which every source appears K times --
-the sampled analogue of the usual corpus score (arXiv:2411.00640, §3.1).
-
-The harness computes no stderr for custom aggregations, so the standard
-errors are provided as the companion metrics `bleu_stderr`/`chrf_stderr`:
-sacrebleu's per-sentence sufficient statistics are extracted once, then
-documents are resampled with replacement (a document's K samples move
-together -- questions are the sampling unit) and the corpus score is
-recomputed from the pooled statistics of each replicate.
+process_results emits K (reference, prediction) pairs per document; the
+aggregations pool the pairs of all documents, so every source appears K times
+in the corpus.  The `bleu_stderr`/`chrf_stderr` companion metrics carry the
+standard errors: per-sentence sufficient statistics are extracted once, then
+documents are resampled with replacement, each document's K pairs moving
+together.
 """
 
 import logging
@@ -60,11 +53,8 @@ def chrf_stderr(items):
 def _bootstrap_stderr(items, metric, direct_score):
     """Bootstrap the corpus score by resampling documents.
 
-    Uses sacrebleu's per-sentence statistics (the machinery behind its
-    significance tests) so each replicate is a cheap re-aggregation rather
-    than a re-tokenization; the statistics are verified against the
-    directly computed corpus score first.
-    """
+    Uses sacrebleu's per-sentence statistics, verified against the directly
+    computed corpus score, so each replicate is a cheap re-aggregation."""
     try:
         pairs = _flatten(items)
         rows = metric._extract_corpus_statistics(
