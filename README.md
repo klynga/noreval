@@ -58,6 +58,27 @@ _____
 
 _____
 
+### Changelog
+
+**NorEval v1.1**
+- New metadata: Every task now explicitly declares the primary metric, random-baseline performance, category and language(s). The order of metrics is changed to list the primary metric first.
+- New task: [SLIDE](https://huggingface.co/datasets/ltg/slide) is a language identification task with five choices: Bokmål, Nynorsk, Danish, Swedish, or other language. One sentence can be compatible with multiple languages, a prediction is considered correct if it matches any of them.
+- New task: [NoCoLA](https://huggingface.co/datasets/ltg/nocola), BLiMP-like Norwegian linguistic acceptability task.
+- New task: Northern Sámi [MultiBLiMP](https://huggingface.co/datasets/jumelet/multiblimp) is actually a group of tasks, we evaluate each linguistic feature separately to get more informative results (unlike the official `lm-eval` MultiBLiMP).
+- New task: NorOpenBookQA without facts is a simple rephrasing of the original NorOpenBookQA so that it evaluates knowledge rather then reading comprehension.
+- New task: Bokmål ↔ Nynorsk translation based on the [NorSumm dataset](https://huggingface.co/datasets/SamiaT/NorSumm), which contains multi-sentence manual translations.
+- New task: Bokmål ↔ Northern Sámi translation based on [ltg/saami-tatoeba](https://huggingface.co/datasets/ltg/saami-tatoeba).
+- NorBelebele is now based on the corrected Bokmål passages from FLORES+ -- [ltg/norbelebele](https://huggingface.co/datasets/ltg/norbelebele).
+- NorBelebele has two additional prompts, so that it's also evaluated in cloze formulation.
+- ASK-GEC is now scored inside the harness, not in an extra post-production step.
+- NorIdiom gets a new primary metric `em_first` and a less aggressive stopping criterion.
+- The references in NorSumm are cleaned -- we strip newlines from the reference summaries, which broke few-shot evaluation previously.
+- Hard-coded `num_fewshot: 0` are removed from `ncb`, `noridiom`, `norsumm`, `nortruthfulqa_gen`, `nortruthfulqa_mc` and `nrk_quiz_qa`.
+- `num_beams: 1` is removed from all generative tasks, which previously broke evaluation with vLLM.
+- `nortruthfulqa_gen`'s `doc_to_target` is changed from " " to `best_answer`, to work properly in few-shot evaluation.
+
+_____
+
 ### How to use
 
 The tasks are plain [LM Evaluation Harness](https://github.com/EleutherAI/lm-evaluation-harness) configs — no fork of the harness is needed. Install the harness, clone this repository, and point the harness to it with `--include_path`:
