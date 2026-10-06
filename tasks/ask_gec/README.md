@@ -17,6 +17,7 @@ Then run the task normally — no `--predict_only`:
 lm_eval \
   --model hf \
   --model_args pretrained=AI-Sweden-Models/Llama-3-8B \
+  --include_path path/to/noreval/tasks \
   --tasks ask_gec_nob \
   --output results/ask_gec_nob/0-shot/ \
   --log_samples \
