@@ -6,10 +6,10 @@ doc_to_target: response
 output_type: generate_until
 metric_list:
   - metric: bleu
-    aggregation: !function utils.pooled_bleu
+    aggregation: !function utils.mean_bleu
     higher_is_better: true
   - metric: chrf
-    aggregation: !function utils.pooled_chrf
+    aggregation: !function utils.mean_chrf
     higher_is_better: true
   - metric: bleu_stderr
     aggregation: !function utils.bleu_stderr
