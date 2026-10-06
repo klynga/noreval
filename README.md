@@ -112,7 +112,6 @@ lm_eval \
 
 * The task names in the table above run all prompt variants of a dataset at once; append a prompt index to run a single variant (e.g. `norquad_p2`).
 * Tasks loaded via `--include_path` take precedence over any same-named NorEval tasks bundled with the harness, so this repository is the source of truth for the task definitions.
-* `ask_gec` does not compute a metric inside the harness: run it with `--log_samples` and score the generated corrections externally with [ERRANT](https://github.com/chrisjbryant/errant) (F0.5).
 
 _____
 
