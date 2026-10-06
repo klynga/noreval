@@ -115,6 +115,11 @@ def rouge(refs, preds):
         summary = summary.replace(" . ", ".\n")
         return summary
 
+    # A single (ref, pred) pair needs no bootstrap: the aggregate's `mid` is exactly that pair's score
+    if len(refs) == 1 and len(preds) == 1:
+        score = scorer.score(_prepare_summary(refs[0]), _prepare_summary(preds[0]))
+        return {type: score[type].fmeasure * 100 for type in rouge_types}
+
     # Accumulate confidence intervals.
     aggregator = scoring.BootstrapAggregator()
     for ref, pred in zip(refs, preds):
