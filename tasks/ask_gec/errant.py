@@ -66,11 +66,11 @@ def evaluate(fpath: str, out_fpath: str):
     os.makedirs("tmp", exist_ok=True)
     sources, targets, predictions = read_examples(fpath=fpath)
     with open(f"tmp/{tmp_name}_sources.txt", "w+") as f:
-        f.write("\n".join(sources))
+        f.write("\n".join(sources) + "\n")
     with open(f"tmp/{tmp_name}_targets.txt", "w+") as f:
-        f.write("\n".join(targets))
+        f.write("\n".join(targets) + "\n")
     with open(f"tmp/{tmp_name}_predictions.txt", "w+") as f:
-        f.write("\n".join(predictions))
+        f.write("\n".join(predictions) + "\n")
     subprocess.run(
         f"errant_parallel -orig tmp/{tmp_name}_sources.txt -cor tmp/{tmp_name}_targets.txt -out tmp/{tmp_name}_targets.m2 -lev -tok",
         shell=True,
