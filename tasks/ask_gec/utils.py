@@ -19,6 +19,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from collections import Counter
 from pathlib import Path
 
 
@@ -99,16 +100,20 @@ def _f05(tp, fp, fn):
 
 
 def _edit_sets(m2_text):
-    """Per-sentence sets of (start, end, correction) edits from an M2 file.
+    """Per-sentence multisets of (start, end, correction) edits from an M2 file.
 
     `-lev` alignment writes a single annotator per sentence, and
     `errant_compare`'s default mode scores span-based correction, so an edit's
     identity is exactly this triple; `noop` entries mark edit-free sentences
     and are not edits.
+
+    Counted with multiplicity, as `errant_compare` does: a degenerate
+    prediction can repeat an insertion at one position hundreds of times, and
+    collapsing those into a set understates the false positives.
     """
     sentences = []
     for block in m2_text.strip("\n").split("\n\n"):
-        edits = set()
+        edits = Counter()
         for line in block.split("\n"):
             if not line.startswith("A "):
                 continue
@@ -116,7 +121,7 @@ def _edit_sets(m2_text):
             if etype == "noop":
                 continue
             start, end = span.split()
-            edits.add((int(start), int(end), correction))
+            edits[(int(start), int(end), correction)] += 1
         sentences.append(edits)
     return sentences
 
@@ -178,7 +183,8 @@ def _run_errant(items):
 
     # per-sentence counts, grouped back into per-document sums for the bootstrap
     counts = [
-        (len(hyp & ref), len(hyp - ref), len(ref - hyp))
+        (sum((hyp & ref).values()), sum((hyp - ref).values()),
+         sum((ref - hyp).values()))
         for hyp, ref in zip(hyp_edits, ref_edits, strict=True)
     ]
     doc_counts, offset = [], 0
