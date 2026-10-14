@@ -3,7 +3,8 @@ output_type: multiple_choice
 training_split: null
 validation_split: validation
 test_split: null
-doc_to_target: 0
+doc_to_target: "{{mc1_targets.labels.index(1)}}"
+process_docs: !function utils.process_docs
 metric_list:
   - metric: acc
     aggregation: mean
