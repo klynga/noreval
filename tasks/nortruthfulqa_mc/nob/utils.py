@@ -10,8 +10,10 @@
 #                        label is the continuation
 #                        -> doc_to_choice: !function utils.mcf_labels_nb
 #
-# The dataset has no answer labels, so labels (A, B, C, ...) are generated
-# positionally from the number of choices.
+# The dataset has no option letters, so labels (A, B, C, ...) are generated
+# positionally from the number of choices.  The options themselves are
+# shuffled per document by process_docs in ../utils.py (the dataset lists
+# the correct answer first).
 
 import string
 
@@ -141,6 +143,11 @@ def choices_text(doc):
     return doc["mc1_targets"]["choices"]
 
 
-# doc_to_choice puts the single correct answer first, so gold is index 0
-process_results = make_process_results(choices_text, lambda doc: [0])          # cf / hybrid
-process_results_mcf = make_process_results(mcf_labels_nb, lambda doc: [0])
+# process_docs (../utils.py) shuffles the choices, so the single correct
+# answer is wherever label 1 landed rather than always index 0
+def gold(doc):
+    return [doc["mc1_targets"]["labels"].index(1)]
+
+
+process_results = make_process_results(choices_text, gold)      # cf / hybrid
+process_results_mcf = make_process_results(mcf_labels_nb, gold)
